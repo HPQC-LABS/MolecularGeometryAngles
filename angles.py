@@ -77,6 +77,9 @@ if __name__ == "__main__":
     three_combs = list(itertools.combinations(ids, 3))
     four_combs = list(itertools.combinations(ids, 4))
 
+    planar_angles_elems = []
+    planar_angles_degs = []
+
     for triangle in three_combs:
         angles = cyclic_permutations(triangle)
 
@@ -84,9 +87,32 @@ if __name__ == "__main__":
             angle_elements = [elements_enum[i] for i in angle_ids]
             angle_coords = [coords[i] for i in angle_ids]
 
+            planar_angles_elems.append("-".join(angle_elements))
+
             angle = compute_angle(angle_coords)
 
-            print("-".join(angle_elements), angle)
+            planar_angles_degs.append(np.round(angle, 5))
+
+    non_repeating_planar_angles_degs = list(set(planar_angles_degs))
+    non_repeating_planar_angles_degs.sort()
+
+    planar_angles_elems = np.array(planar_angles_elems)
+    planar_angles_degs = np.array(planar_angles_degs)
+
+    planar_angles_dict = {}
     
-    
+    for angle in non_repeating_planar_angles_degs:
+        ids = np.ravel(np.argwhere(planar_angles_degs == angle))
+
+        planar_angles_dict[angle] = list(planar_angles_elems[ids.astype(int)])
+
+    for pyramid in four_combs:
+        print(pyramid)
+
+        planes = list(itertools.combinations(pyramid, 3))
+        pairs_of_planes = list(itertools.combinations(planes, 2))
+        
+        
+
+        break
     
