@@ -36,6 +36,24 @@ def compute_angle_from_vectors(vec1, vec2):
 
     return angle_rads, angle_deg
 
+def compute_normal_to_plane(a, b, c):
+    vec1 = a - b
+    vec2 = c - b
+
+    n = np.cross(vec1, vec2)
+    return n
+
+def compute_angle_between_planes(plane1, plane2):
+    a1, b1, c1 = plane1
+    a2, b2, c2 = plane2
+
+    n1 = compute_normal_to_plane(a1, b1, c1)
+    n2 = compute_normal_to_plane(a2, b2, c2)
+
+    _, angle = compute_angle_from_vectors(n1, n2)
+
+    return angle
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         prog="ComputeAngles",
@@ -112,7 +130,12 @@ if __name__ == "__main__":
         planes = list(itertools.combinations(pyramid, 3))
         pairs_of_planes = list(itertools.combinations(planes, 2))
         
-        
+        for pair in pairs_of_planes:
+            plane1_ids, plane2_ids = pair
+            
+            plane1_coords = np.array([coords[i] for i in plane1_ids])
+            plane2_coords = np.array([coords[i] for i in plane2_ids])
 
-        break
+            angle = compute_angle_between_planes(plane1_coords, plane2_coords)
+            
     
